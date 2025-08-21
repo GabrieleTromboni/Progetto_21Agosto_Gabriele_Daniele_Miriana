@@ -90,22 +90,20 @@ def prepare_data(
     2. Prepare features and target for supervised or unsupervised learning.
     '''
 
-    # Drop 'id' column before standardize
-    df = df.drop(columns=['id'])
-
     # Take only numeric features
-    features = df[['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'ca']]
-
+    features = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak', 'ca']
+    X = df[features]
+    
     # Standardize numeric features
     scaler = StandardScaler()
-    features = scaler.fit_transform(features)
+    X_scaled = scaler.fit_transform(X)
 
     if learning_method == 'supervised':
         # Prepare target variable for supervised learning
         df['target'] = (df['num'] > 0).astype(int)
         target = df['target']
 
-        return (features, target)
-    
+        return (X_scaled, target)
+
     if learning_method == 'unsupervised':
-        return (features, None)
+        return (X_scaled, None)
